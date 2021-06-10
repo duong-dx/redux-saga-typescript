@@ -1,0 +1,56 @@
+.parent  {
+    width: 50%;
+    margin: auto;
+}
+
+.form-control {
+    width: 100%;
+    padding: 6px 12px;
+    min-height: 55px;
+    border-radius: 10px;
+    margin: 10px !important;
+    font-size: 20px;
+
+    &:focus-visible {
+        outline: -webkit-focus-ring-color auto 0;
+    }
+}
+
+.custom-button {
+    border-radius: 4px;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 22px;
+    padding: 19px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.custom-button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.custom-button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.custom-button:hover span {
+    padding-right: 25px;
+}
+
+.custom-button:hover span:after {
+    opacity: 1;
+    right: 0;
+}

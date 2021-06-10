@@ -1,57 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, {lazy, Suspense} from 'react';
+import { Router, Switch, Redirect, Route } from 'react-router-dom';
+import List from "./containers/List";
+import { createBrowserHistory } from 'history';
+import { Spinner } from 'react-spinners-css';
+const history = createBrowserHistory();
 
-function App() {
+interface router {
+  url: string,
+  component: string
+}
+
+const listRouter: Array<router> = [
+  {
+    url: 'list',
+    component: 'List'
+  },
+  {
+    url: 'test',
+    component: 'test'
+  }
+];
+
+const renderComponent = (router: router, index: number):any => {
+  const style = {
+    minHeight: '100vh',
+    justifyContent: "center",
+    display: 'flex',
+    alignItems:'center',
+    margin: 'auto'
+  }
+  
+  const color:string = 'linear-gradient(#0259af,rgb(144 205 228 / 80%))'
+  const  Component = lazy(() => import(`./containers/${router.component}`))
+  return <Route
+    key={index}
+    exact path={`/${router.url}`}
+    render={() =>
+      <Suspense fallback={<div style={style}><Spinner color={color} /></div>}><Component />
+      </Suspense>} />
+}
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Router history={history}>
+      <Switch>
+        <Redirect exact from='/' to='/list' />
+        
+        {/* eslint-disable-next-line array-callback-return */}
+        {listRouter.map((subRouter:router, index) => renderComponent(subRouter, index))}
+        <Redirect to='/list' />
+      </Switch>
+    </Router>
   );
 }
 
