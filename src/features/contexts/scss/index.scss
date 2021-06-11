@@ -1,5 +1,4 @@
 .parent  {
-    width: 50%;
     margin: auto;
 }
 
@@ -8,7 +7,7 @@
     padding: 6px 12px;
     min-height: 55px;
     border-radius: 10px;
-    margin: 10px !important;
+    margin: 10px 0 !important;
     font-size: 20px;
 
     &:focus-visible {
@@ -53,4 +52,19 @@
 .custom-button:hover span:after {
     opacity: 1;
     right: 0;
+}
+
+.text {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.multicolor-text {
+    font-size: 20px;
+    margin: auto;
+    background-image: linear-gradient(to left, #2C6EEA, #3C78EA, #5387EA, #6D98E9, #84A8EB, #99B6EE, #B0C6EF);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }

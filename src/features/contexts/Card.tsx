@@ -2,24 +2,15 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
+import {CardContent, CardMedia, CardHeader, CardActions, Collapse, IconButton, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {ITodo} from './TodoContext'
+import {ExpandMore, Share, MoreVert} from '@material-ui/icons';
+import TodoContext, {ContextType, ITodo} from './TodoContext'
+import CustomButtonHear from "./CustomButtonHear";
 
 type Props = {
   todo: ITodo
-  updateTodo: (id: number) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,32 +31,30 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     expandOpen: {
       transform: 'rotate(180deg)',
-    },
-    avatar: {
-      backgroundColor: red[500],
-    },
+    }
   }),
 );
 
-const CardToDo: React.FC<Props> = ({todo, updateTodo}) => {
+const CardToDo: React.FC<Props> = ({todo}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  
+  const { updateTodo } = React.useContext(TodoContext) as ContextType
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  
   
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar aria-label="recipe" style={{backgroundColor: `#${todo.color}`}}>
             {todo.name.charAt(0)}
           </Avatar>
         }
         action={
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <MoreVert />
           </IconButton>
         }
         title={todo.name}
@@ -73,20 +62,18 @@ const CardToDo: React.FC<Props> = ({todo, updateTodo}) => {
       />
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
+        image={todo.image}
+        title={todo.title.substring(0,8)}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography className='card-title' variant="body2" color="textSecondary">
           {todo.title}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
+        <CustomButtonHear todo={todo} updateTodo={updateTodo} />
         <IconButton aria-label="share">
-          <ShareIcon />
+          <Share />
         </IconButton>
         <IconButton
           className={clsx(classes.expand, {
@@ -96,7 +83,7 @@ const CardToDo: React.FC<Props> = ({todo, updateTodo}) => {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <ExpandMore />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>

@@ -1,0 +1,15 @@
+.group-card {
+    .MuiCard-root {
+        margin: 30px auto;
+        max-width: 600px !important;
+
+    }
+
+    .MuiPaper-root {
+        box-shadow: 0 1px 17px -1px #E1E1E1, 0px 3px 1px 0px #E2E2E2, 0px 1px 3px 0px #E5E5E5 !important;
+    }
+
+    .card-title {
+        font-size: 18px;
+    }
+}

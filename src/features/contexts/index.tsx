@@ -6,7 +6,7 @@ import TodoContext, {ContextType} from "./TodoContext";
 import TextField from '@material-ui/core/TextField';
 import './scss/index.scss'
 
-const Index:React.FC<TestAppProps> = () => {
+const Index:React.FC<TestAppProps> = ({closeModal}) => {
   const { saveTodo } = React.useContext(TodoContext) as ContextType
   const [valueForm, setValueForm] = useState<ITodo | {}>()
   const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -20,6 +20,7 @@ const Index:React.FC<TestAppProps> = () => {
   
   const saveData = (e: React.MouseEvent<HTMLInputElement>, data: ITodo | any):void => {
     saveTodo(data)
+    closeModal()
   }
   
   return (
@@ -65,6 +66,8 @@ const Index:React.FC<TestAppProps> = () => {
   );
 }
 
-interface TestAppProps {}
+interface TestAppProps {
+  closeModal: () => void
+}
 
 export default Index;

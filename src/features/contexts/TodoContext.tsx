@@ -7,6 +7,8 @@ export interface ITodo {
   description: string
   status: boolean
   time: any
+  image: any
+  color: string
 }
 
 export type ContextType = {
