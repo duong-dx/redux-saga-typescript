@@ -1,7 +1,8 @@
 import React from 'react';
+import {Counter} from '../features/counter/Counter'
 
 const Test:React.FC = (props) => {
-  return <h1> Test </h1>
+  return <Counter/>
 }
 
 export default Test;
