@@ -18,6 +18,7 @@ import Anh15 from './images/anh17.jpeg'
 import Anh16 from './images/anh18.jpeg'
 import Anh17 from './images/anh19.jpeg'
 import Anh18 from './images/anh20.jpeg'
+import NY from './images/ny.jpg'
 const TodoProvide:React.FC = ({ children }) => {
   const images: Array<any> =
     [Anh1, Anh2, Anh3, Anh4, Anh5, Anh6, Anh7, Anh8, Anh9, Anh10, Anh11, Anh12, Anh13, Anh14 , Anh15, Anh16, Anh17, Anh18]
@@ -36,6 +37,16 @@ const TodoProvide:React.FC = ({ children }) => {
   const [todos, setTodos] = React.useState<ITodo[]>([
     {
       id: 1,
+      name: 'Xuân Dương',
+      title: "Love you to the moon come back",
+      description: "Love you to the moon come back",
+      status: true,
+      time: dateNow,
+      image: NY,
+      color: randomBackgroundColor()
+    },
+    {
+      id: 2,
       name: 'Ẩn danh',
       title: "Hoa cúc họa mi là hoa gì",
       description: "Cứ mỗi độ Đông về, hình ảnh những bông hoa cúc họa mi nhỏ bé, mộc mạc, xinh xắn lại tràn ngập khắp các phố phường Hà Nội. Đi dọc các con đường, bạn có thể dễ dàng bắt gặp bóng dáng những chiếc xe đạp chở đầy những cành hoa tươi, cánh hoa trắng muốt làm nền cho màu vàng của nhụy hoa nổi bật lên, vừa duyên dáng lại vừa giản dị, chân chất. \n",
@@ -45,7 +56,7 @@ const TodoProvide:React.FC = ({ children }) => {
       color: randomBackgroundColor()
     },
     {
-      id: 2,
+      id: 3,
       name: 'Ẩn danh',
       title: "Hoa cúc họa mi",
       description: "Hoa cúc họa mi là loài hoa nhỏ thuộc họ Cúc, có tên gọi tiếng Anh là Daisy. Cúc họa mi được biết đến là loài hoa mọc hoang dã, sống bền bỉ và mạnh mẽ dù thân cây nhỏ bé, tán lá mỏng manh và yếu ớt.",
@@ -53,7 +64,7 @@ const TodoProvide:React.FC = ({ children }) => {
       time: dateNow,
       image: Anh14,
       color: randomBackgroundColor()
-    }
+    },
   ]);
   
   const saveTodo = (todo: ITodo) => {
