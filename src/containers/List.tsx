@@ -46,4 +46,4 @@ const List:React.FC = () => {
   </TodoProvide>
 }
 
-export default List;
+export default React.memo(List)
