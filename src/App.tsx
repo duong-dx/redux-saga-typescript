@@ -18,6 +18,10 @@ const listRouter: Array<router> = [
   {
     url: 'test',
     component: 'test'
+  },
+  {
+    url: 'posts',
+    component: 'post'
   }
 ];
 

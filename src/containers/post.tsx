@@ -1,8 +1,9 @@
 import React from 'react';
+import PostComponent from '../features/posts/index'
 
 const Post:React.FC = () => {
   return (
-    <div> </div>
+    <PostComponent />
   )
 }
 

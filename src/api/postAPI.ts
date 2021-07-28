@@ -3,7 +3,7 @@ import axiosClient from './axiosClient';
 const postAPI = {
   getAll() {
     const url = '/index'
-    axiosClient.get(url)
+    return axiosClient.get(url)
   },
 }
 
