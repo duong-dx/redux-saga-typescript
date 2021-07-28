@@ -1,9 +1,13 @@
 import axiosClient from './axiosClient';
 
 const postAPI = {
-  getAll() {
-    const url = '/index'
-    return axiosClient.get(url)
+  getAll(accessToken: string) {
+    const url = '/posts/index'
+    return axiosClient.get(url, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
   },
 }
 

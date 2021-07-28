@@ -24,19 +24,25 @@ export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    getAll(state: ListPost, action: PayloadAction<ListPost>) {
-      console.log(state, action, 'getAll - postSlice');
+    getList(state, action: PayloadAction) {
+      console.log(state, action, 'getList');
+    },
+
+    addList(state: ListPost, action: PayloadAction<ListPost>) {
       state = action.payload
+      console.log(state, action, 'addList - postSlice');
+      return state
     },
 
     add(state: ListPost, action: PayloadAction<Post>) {
-      console.log(state, action, 'add - postSlice');
       state.posts = [...state.posts, action.payload]
+      console.log(state, action, 'add - postSlice');
+      return state
     }
   }
 })
 
-export const {getAll, add} = postSlice.actions
+export const {getList, addList, add} = postSlice.actions
 export {
   initialState
 }
