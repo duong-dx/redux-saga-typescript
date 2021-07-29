@@ -10,22 +10,33 @@ export type ListPost = {
   posts: Post[],
   page: number,
   limit: number,
-  total: number
+  total: number,
+  loading: boolean
+}
+
+export interface PostPayload {
+  post: Post,
+  token: string,
+  history: any
 }
 
 const initialState: ListPost = {
   posts: [],
   page: 1,
   limit: 10,
-  total: 0
+  total: 0,
+  loading: false
 }
 
 export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    getList(state, action: PayloadAction) {
-      console.log(state, action, 'getList');
+    getList(state, action: PayloadAction<string>) {
+      const newState = {...state}
+      newState.loading = true
+      state = newState
+      return state
     },
 
     addList(state: ListPost, action: PayloadAction<ListPost>) {
@@ -34,15 +45,13 @@ export const postSlice = createSlice({
       return state
     },
 
-    add(state: ListPost, action: PayloadAction<Post>) {
-      state.posts = [...state.posts, action.payload]
-      console.log(state, action, 'add - postSlice');
-      return state
+    addPostRequest(state, action: PayloadAction<PostPayload>) {
+
     }
   }
 })
 
-export const {getList, addList, add} = postSlice.actions
+export const {getList, addList, addPostRequest} = postSlice.actions
 export {
   initialState
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import PostComponent from '../features/posts/components'
+import CreateComponent from '../features/posts/components/create'
 
 const Post:React.FC = () => {
   return (
-    <PostComponent />
+    <CreateComponent />
   )
 }
 

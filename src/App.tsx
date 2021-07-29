@@ -8,21 +8,30 @@ const history = createBrowserHistory();
 interface router {
   url: string,
   component: string
+  auth: boolean
 }
 
 const listRouter: Array<router> = [
   {
     url: 'list',
-    component: 'List'
+    component: 'List',
+    auth: true
   },
   {
     url: 'test',
-    component: 'test'
+    component: 'test',
+    auth: false
   },
   {
     url: 'posts',
-    component: 'post'
-  }
+    component: 'post',
+    auth: true
+  },
+  {
+    url: 'posts/create',
+    component: 'create-post',
+    auth: true
+  },
 ];
 
 const renderComponent = (router: router, index: number):any => {
