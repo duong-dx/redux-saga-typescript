@@ -32,6 +32,11 @@ const listRouter: Array<router> = [
     component: 'create-post',
     auth: true
   },
+  {
+    url: 'material',
+    component: 'material-index',
+    auth: true
+  },
 ];
 
 const renderComponent = (router: router, index: number):any => {

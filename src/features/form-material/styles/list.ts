@@ -1,0 +1,18 @@
+import {createStyles, Theme} from '@material-ui/core';
+
+const listStyle = createStyles ((themes:Theme) => ({
+  list: {
+    padding: 30
+  },
+
+  checkBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#fff !important',
+    '&:focus-visible': {
+      outline: '-webkit-focus-ring-color auto 0'
+    }
+  }
+}))
+
+export { listStyle }
