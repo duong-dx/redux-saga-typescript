@@ -1,0 +1,89 @@
+#dark-light {
+  width: 80px;
+  cursor: pointer;
+  border-radius: 10em;
+  .toggle-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    display: none;
+  }
+
+  .toggle-slot {
+    position: relative;
+    height: 40px;
+    width: 70px;
+    cruiser: pointer !important;
+    border: 5px solid #e4e7ec;
+    border-radius: 10em;
+    background-color: white;
+    box-shadow: 0px 10px 25px #e4e7ec;
+    transition: background-color 250ms;
+  }
+
+  .toggle-checkbox:checked ~ .toggle-slot {
+    background-color: #374151;
+  }
+
+  .toggle-button {
+    transform: translate(45px, 10px);
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #ffeccf;
+    box-shadow: inset 0px 0px 0px 0.75em #ffbb52;
+    transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+  }
+
+  .toggle-checkbox:checked ~ .toggle-slot .toggle-button {
+    background-color: #485367;
+    box-shadow: inset 0px 0px 0px 0.75em white;
+    transform: translate(8px, 10px);
+  }
+
+  .sun-icon {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    color: #ffbb52;
+  }
+
+  .sun-icon-wrapper {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    opacity: 1;
+    transform: translate(8px, 10px) rotate(15deg);
+    transform-origin: 50% 50%;
+    transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+  }
+
+  .toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
+    opacity: 0;
+    transform: translate(20px, 15px) rotate(0deg);
+  }
+
+  .moon-icon {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    color: white;
+  }
+
+  .moon-icon-wrapper {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    opacity: 0;
+    transform: translate(45px, 10px) rotate(0deg);
+    transform-origin: 50% 50%;
+    transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+  }
+
+  .toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
+    opacity: 1;
+    transform: translate(45px, 10px) rotate(-15deg);
+  }
+}

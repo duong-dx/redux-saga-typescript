@@ -33,8 +33,8 @@ const listRouter: Array<router> = [
     auth: true
   },
   {
-    url: 'material',
-    component: 'material-index',
+    url: 'music',
+    component: 'music-index',
     auth: true
   },
 ];

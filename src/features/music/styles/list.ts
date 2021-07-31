@@ -7,7 +7,7 @@ const listStyle = createStyles ((themes:Theme) => ({
 
   checkBox: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: '#fff !important',
     '&:focus-visible': {
       outline: '-webkit-focus-ring-color auto 0'
