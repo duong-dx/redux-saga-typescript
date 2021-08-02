@@ -2,7 +2,7 @@ import {createStyles, Theme} from '@material-ui/core';
 
 const listStyle = createStyles ((themes:Theme) => ({
   list: {
-    padding: 30
+    padding: 15
   },
 
   checkBox: {

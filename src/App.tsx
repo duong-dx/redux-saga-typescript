@@ -37,6 +37,11 @@ const listRouter: Array<router> = [
     component: 'music-index',
     auth: true
   },
+  {
+    url: 'player',
+    component: 'player',
+    auth: true
+  },
 ];
 
 const renderComponent = (router: router, index: number):any => {

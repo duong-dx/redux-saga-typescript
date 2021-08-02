@@ -39,12 +39,12 @@ const ButtonPlayStyle = makeStyles ((themes:Theme) => ({
   icon: {},
   '@media (max-width: 400px)': {
     root: {
-      height: '35px',
-      minWidth: "35px",
+      height: '30px',
+      minWidth: "30px",
     },
 
     icon: {
-      fontSize: '20px'
+      fontSize: '16px'
     }
   },
 }))

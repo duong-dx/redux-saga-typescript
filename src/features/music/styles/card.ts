@@ -69,7 +69,7 @@ const cardStyle = makeStyles ((themes:Theme) => ({
       height: 45,
     },
     icon: {
-      fontSize: '20px'
+      fontSize: '16px'
     },
   },
 

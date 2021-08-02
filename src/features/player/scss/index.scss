@@ -1,0 +1,62 @@
+.process {
+  height: 400px;
+}
+.process .bars {
+  width: 300px;
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.process .bars .bar {
+  height: 100%;
+  width: 9%;
+}
+@-moz-keyframes sound {
+  0% {
+    opacity: 0.35;
+    background: #f3f3f3;
+    height: 1px;
+  }
+  100% {
+    opacity: 1;
+    background: #fff;
+    height: 100%;
+  }
+}
+@-webkit-keyframes sound {
+  0% {
+    opacity: 0.35;
+    background: #f3f3f3;
+    height: 1px;
+  }
+  100% {
+    opacity: 1;
+    background: #fff;
+    height: 100%;
+  }
+}
+@-o-keyframes sound {
+  0% {
+    opacity: 0.35;
+    background: #f3f3f3;
+    height: 1px;
+  }
+  100% {
+    opacity: 1;
+    background: #fff;
+    height: 100%;
+  }
+}
+@keyframes sound {
+  0% {
+    opacity: 0.35;
+    background: #f3f3f3;
+    height: 1px;
+  }
+  100% {
+    opacity: 1;
+    background: #fff;
+    height: 100%;
+  }
+}
