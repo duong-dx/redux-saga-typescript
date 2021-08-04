@@ -17,7 +17,7 @@ const playerStyle = createStyles ((themes:Theme) => ({
   controlPlayer: {
     transform: 'translateX(-50%)',
     position: 'absolute',
-    minWidth: '90%',
+    minWidth: '85%',
     minHeight: 300,
     padding: 15,
     left: '50%',
@@ -26,70 +26,6 @@ const playerStyle = createStyles ((themes:Theme) => ({
     boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',
     background: 'rgba(255, 255, 255, .2)'
   },
-
-  // progress: {
-  //   minHeight: 400,
-  //   width: '90%',
-  // },
-  // bars:  {
-  //   width: '300px',
-  //   height: '150px',
-  //   display: 'flex',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'flex-end',
-  // },
-  // bar: {
-  //   height: '100%',
-  //   width: '9%',
-  // },
-  // "@-moz-keyframes sound": {
-  //   "0%": {
-  //     opacity: 0.35,
-  //     background: "#f3f3f3",
-  //     height: 1,
-  //   },
-  //   "100%": {
-  //     opacity: 0,
-  //     transform: "translateY(-200%)"
-  //   }
-  // },
-  //
-  // "@-webkit-keyframes sound": {
-  //   "0%": {
-  //     opacity: 0.35,
-  //     background: "#f3f3f3",
-  //     height: 1,
-  //   },
-  //   "100%": {
-  //     opacity: 0,
-  //     transform: "translateY(-200%)"
-  //   }
-  // },
-  //
-  // "@-o-keyframes sound": {
-  //   "0%": {
-  //     opacity: 0.35,
-  //     background: "#f3f3f3",
-  //     height: 1,
-  //   },
-  //   "100%": {
-  //     opacity: 0,
-  //     transform: "translateY(-200%)"
-  //   }
-  // },
-  //
-  // "@keyframes sound": {
-  //   "0%": {
-  //     opacity: 0.35,
-  //     background: "#f3f3f3",
-  //     height: 1,
-  //   },
-  //   "100%": {
-  //     opacity: 0,
-  //     transform: "translateY(-200%)"
-  //   }
-  // },
-
 }))
 
 export { playerStyle }
