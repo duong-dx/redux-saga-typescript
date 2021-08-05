@@ -16,12 +16,13 @@ function urlBase64ToUint8Array(base64String: any) {
 }
 
 function sendSubscription(subscription: any) {
-  console.log(233333);
+  const token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2xvZ2luIiwiaWF0IjoxNjI4MTUyNTk2LCJleHAiOjE2Mjg3NTczOTYsIm5iZiI6MTYyODE1MjU5NiwianRpIjoic1VFWHYzNVVzRjltaFRZayIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.bUjGsZAV_Y7A18vdTauqZaPKogZsjiaATeNVckTHe08'
   return fetch(`${process.env.REACT_APP_API_URL}/push`, {
     method: 'POST',
     body: JSON.stringify(subscription),
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   })
 }
