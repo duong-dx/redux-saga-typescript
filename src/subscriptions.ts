@@ -1,69 +1,48 @@
-console.log(process.env.REACT_APP_PUBLIC_VAPID_KEY);
+import PushNotification from "api/push-notification"
+
 const convertedVapidKey = urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_VAPID_KEY)
-
+const token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2xvZ2luIiwiaWF0IjoxNjI4MTgwMzY1LCJleHAiOjE2Mjg3ODUxNjUsIm5iZiI6MTYyODE4MDM2NSwianRpIjoibTcyaVJGRnZYTm1pWFBiWiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.NEXex8Sh4K40OU4nRAcOJzSSnqEhSAubNpmKHZZ06q4'
+console.log(convertedVapidKey)
 function urlBase64ToUint8Array(base64String: any) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4)
-  // eslint-disable-next-line
-  const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/")
-  
-  const rawData = window.atob(base64)
-  const outputArray = new Uint8Array(rawData.length)
-  
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i)
-  }
-  return outputArray
-}
+  var padding = '='.repeat((4 - base64String.length % 4) % 4);
+  var base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
 
-function sendSubscription(subscription: any) {
-  const token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2xvZ2luIiwiaWF0IjoxNjI4MTUyNTk2LCJleHAiOjE2Mjg3NTczOTYsIm5iZiI6MTYyODE1MjU5NiwianRpIjoic1VFWHYzNVVzRjltaFRZayIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.bUjGsZAV_Y7A18vdTauqZaPKogZsjiaATeNVckTHe08'
-  return fetch(`${process.env.REACT_APP_API_URL}/push`, {
-    method: 'POST',
-    body: JSON.stringify(subscription),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
+  var rawData = window.atob(base64);
+  var outputArray = new Uint8Array(rawData.length);
+
+  for (var i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
 }
 
 export function subscribeUser() {
   console.log(navigator, navigator.serviceWorker);
   if ('serviceWorker' in navigator) {
-    console.log(11111111);
-    navigator.serviceWorker.ready.then(function(registration) {
-      if (!registration.pushManager) {
-        console.log('Push manager unavailable.')
-        return
-      }
-      
-      registration.pushManager.getSubscription().then(function(existedSubscription) {
-        if (existedSubscription === null) {
-          console.log('No subscription detected, make a request.')
-          registration.pushManager.subscribe({
-            applicationServerKey: convertedVapidKey,
-            userVisibleOnly: true,
-          }).then(function(newSubscription) {
-            console.log(99999);
-            console.log('New subscription added.')
-            sendSubscription(newSubscription)
-          }).catch(function(e) {
-            if (Notification.permission !== 'granted') {
-              console.log('Permission was not granted.')
-            } else {
-              console.error('An error ocurred during the subscription process.', e)
-            }
-          })
-        } else {
-          console.log('Existed subscription detected.')
-          sendSubscription(existedSubscription)
-        }
-      })
+    navigator.serviceWorker.ready.then((registration) => {
+      const subscribeOptions = {
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey
+      };
+
+      console.log(subscribeOptions)
+      return registration.pushManager.subscribe(subscribeOptions);
     })
-      .catch(function(e) {
-        console.log(5555555555555);
-        console.error('An error ocurred during Service Worker registration.', e, 10000000000000)
-      })
+    .then((pushSubscription) => {
+        console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+        PushNotification.pushEndPointDevice(token, pushSubscription)
+        .then(response => {
+          console.log(response) 
+        })
+        .catch(error => {
+          console.log(error) 
+        })
+    })
+    // .catch((error) => {
+    //   console.log('looix roi', error)
+    // })
   } else {
     console.log(33333);
   }
