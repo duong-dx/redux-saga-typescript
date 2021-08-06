@@ -26,7 +26,7 @@ type Config = {
 };
 
 export function register(config?: Config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -37,8 +37,11 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-
+      const swFileName = process.env.NODE_ENV === 'production'
+        ? 'service-worker.js'
+        : 'custom-sw.js'
+      const swUrl = `${process.env.PUBLIC_URL}/${swFileName}`;
+      console.log(swUrl, 444444444);
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
@@ -63,6 +66,7 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      initPush()
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
@@ -78,7 +82,7 @@ function registerValidSW(swUrl: string, config?: Config) {
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
               );
-
+      
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
@@ -88,7 +92,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log('Content is cached for offline use.');
-
+      
               // Execute callback
               if (config && config.onSuccess) {
                 config.onSuccess(registration);
@@ -104,6 +108,7 @@ function registerValidSW(swUrl: string, config?: Config) {
 }
 
 function checkValidServiceWorker(swUrl: string, config?: Config) {
+  console.log('checkValidServiceWorker', 100009)
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
@@ -130,6 +135,28 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       console.log(
         'No internet connection found. App is running in offline mode.'
       );
+    });
+}
+
+function initPush() {
+  if (!navigator.serviceWorker.ready) {
+    return;
+  }
+  
+  new Promise(function (resolve, reject) {
+    const permissionResult = Notification.requestPermission(function (result) {
+      resolve(result);
+    });
+    
+    if (permissionResult) {
+      permissionResult.then(resolve, reject);
+    }
+  })
+    .then((permissionResult) => {
+      if (permissionResult !== 'granted') {
+        throw new Error('We weren\'t granted permission.');
+      }
+      console.log('device accepted notification');
     });
 }
 

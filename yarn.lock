@@ -1427,6 +1427,16 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@iconify/icons-mdi@^1.1.17":
+  "integrity" "sha512-9Ot1n1bpyTtOj0jzY44My8KOKaHNyZSFry2U1YFt8sCykKVLttoKcxYnXLGN9HIFzY7eKjOLvhA1Vbjt3ZFhpQ=="
+  "resolved" "https://registry.npmjs.org/@iconify/icons-mdi/-/icons-mdi-1.1.17.tgz"
+  "version" "1.1.17"
+
+"@iconify/react@^1.1.4":
+  "integrity" "sha512-oxq8IMOq8q3nKGiDHbQPC8FcFuBsKve68JWBo140d5LRnj0bv5TB/FE/y01ZSvEZ7PlI2HIrnb2qivPN8kTDgw=="
+  "resolved" "https://registry.npmjs.org/@iconify/react/-/react-1.1.4.tgz"
+  "version" "1.1.4"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   "integrity" "sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ=="
   "resolved" "https://registry.npmjs.org/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz"

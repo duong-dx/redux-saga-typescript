@@ -13,3 +13,12 @@ export interface Songs {
   page: number
   total: number
 }
+
+export interface SubscriptionEndPoint  {
+  endpoint: string,
+  expirationTime: any,
+  keys: {
+    auth: string,
+    p256dh: string
+  }
+}
