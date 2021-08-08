@@ -1,7 +1,7 @@
 import React from 'react';
 import { playerStyle } from './styles';
 import { withStyles } from '@material-ui/core';
-import { Song } from '../../contansts';
+import { Song } from '../../constants';
 import './scss/index.scss'
 
 type Props = {

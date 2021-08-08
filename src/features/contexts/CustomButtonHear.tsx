@@ -22,4 +22,4 @@ const CustomButtonHear: React.FC<Props> = ({todo, updateTodo}) => {
   );
 }
 
-export default CustomButtonHear;
+export default React.memo(CustomButtonHear);

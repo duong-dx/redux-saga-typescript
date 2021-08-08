@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Song } from '../../../contansts';
+import { Song } from '../../../constants';
 import anhNy from '../../contexts/images/ny.jpg'
 
 export type propsCardStyle = {

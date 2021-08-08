@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {ITodo} from './TodoContext'
 // import CustomButton from "./CustomButton";
 import CustomButton1 from "./CustomButton1";
@@ -18,11 +18,14 @@ const Index:React.FC<TestAppProps> = ({closeModal}) => {
     )
   }
   
-  const saveData = (e: React.MouseEvent<HTMLInputElement>, data: ITodo | any):void => {
+  const saveData = useCallback((data: ITodo | any):void => {
     saveTodo(data)
     closeModal()
-  }
-  
+  }, [])
+
+  const handleSave = useCallback(() => {
+    saveData(valueForm)
+  }, [valueForm])
   return (
     <div className='parent'>
       <div>
@@ -61,7 +64,7 @@ const Index:React.FC<TestAppProps> = ({closeModal}) => {
         />
       </div>
       {/*<CustomButton>Save</CustomButton>*/}
-      <div><CustomButton1 handleSave={(e: any) => saveData(e, valueForm)}>Ấn vào đây ❤️</CustomButton1></div>
+      <div><CustomButton1 handleSave={handleSave}>Ấn vào đây ❤️</CustomButton1></div>
     </div>
   );
 }
@@ -70,4 +73,4 @@ interface TestAppProps {
   closeModal: () => void
 }
 
-export default Index;
+export default React.memo(Index);

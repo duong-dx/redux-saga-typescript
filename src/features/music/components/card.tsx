@@ -1,6 +1,5 @@
 import React from 'react';
 import {cardStyle} from '../styles/card'
-import {Song} from '../../../contansts';
 import {Grid} from '@material-ui/core';
 import ButtonPlay from './button-play';
 import { Favorite, FavoriteBorder, MoreVert } from '@material-ui/icons';

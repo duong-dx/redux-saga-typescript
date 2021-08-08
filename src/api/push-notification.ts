@@ -1,4 +1,4 @@
-import { SubscriptionEndPoint } from "contansts";
+import { SubscriptionEndPoint } from "../constants";
 import axiosClient from "./axiosClient";
 
 const PushNotification = {

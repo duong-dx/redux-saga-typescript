@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -38,9 +38,9 @@ const CardToDo: React.FC<Props> = ({todo}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { updateTodo } = React.useContext(TodoContext) as ContextType
-  const handleExpandClick = () => {
+  const handleExpandClick = useCallback(() => {
     setExpanded(!expanded);
-  };
+  }, [expanded]);
   
   
   return (
@@ -96,5 +96,5 @@ const CardToDo: React.FC<Props> = ({todo}) => {
     </Card>
   );
 }
-export default CardToDo;
+export default React.memo(CardToDo);
 

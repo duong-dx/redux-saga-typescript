@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PlayerComponent from '../features/player'
-import { Song } from '../contansts';
+import { Song } from '../constants';
 import backGround from '../assets/images/10.jpg';
 
 const Player: React.FC = () => {
