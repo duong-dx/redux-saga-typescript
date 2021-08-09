@@ -8,12 +8,14 @@ import * as serviceWorker from './serviceWorker';
 import themes from './Styles/theme';
 import { MuiThemeProvider } from '@material-ui/core';
 import {subscribeUser} from "./subscriptions"
+import RouterComponent from './Router/index';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <MuiThemeProvider theme={themes}>
-      <App />
+        <App />
+        <RouterComponent/> 
       </MuiThemeProvider>
     </Provider>
   </React.StrictMode>,

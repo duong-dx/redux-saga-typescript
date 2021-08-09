@@ -1,7 +1,8 @@
 import PushNotification from "api/push-notification"
+import { getAccessToken } from './hooks/index';
 
 const convertedVapidKey = urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_VAPID_KEY)
-const token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2xvZ2luIiwiaWF0IjoxNjI4MTgwMzY1LCJleHAiOjE2Mjg3ODUxNjUsIm5iZiI6MTYyODE4MDM2NSwianRpIjoibTcyaVJGRnZYTm1pWFBiWiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.NEXex8Sh4K40OU4nRAcOJzSSnqEhSAubNpmKHZZ06q4'
+const token: string = getAccessToken()
 function urlBase64ToUint8Array(base64String: any) {
   var padding = '='.repeat((4 - base64String.length % 4) % 4);
   var base64 = (base64String + padding)

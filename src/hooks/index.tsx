@@ -1,9 +1,5 @@
-import React from 'react';
-
-function Index() {
-  return (
-    <div></div>
-  );
+export const getAccessToken = (): string => {
+  return String(process.env.REACT_APP_ACCESS_TOKEN)
 }
 
-export default Index;
+

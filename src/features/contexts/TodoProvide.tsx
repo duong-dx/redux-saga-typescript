@@ -19,6 +19,8 @@ import Anh16 from './images/anh18.jpeg'
 import Anh17 from './images/anh19.jpeg'
 import Anh18 from './images/anh20.jpeg'
 import NY from './images/ny.jpg'
+import PushNotification from 'api/push-notification';
+import { getAccessToken } from '../../hooks/index';
 
 const images: Array<any> =
     [Anh1, Anh2, Anh3, Anh4, Anh5, Anh6, Anh7, Anh8, Anh9, Anh10, Anh11, Anh12, Anh13, Anh14 , Anh15, Anh16, Anh17, Anh18]
@@ -70,7 +72,6 @@ const TodoProvide:React.FC = ({ children }) => {
   ]);
   
   const saveTodo = useCallback((todo: ITodo) => {
-    
     const newTodo: ITodo = {
       id: Math.floor((Math.random() * 10000)), // not really unique - but fine for this example
       name: todo ? todo.name : 'Ẩn danh' ,
@@ -81,7 +82,13 @@ const TodoProvide:React.FC = ({ children }) => {
       image: randomImage(),
       color: randomBackgroundColor()
     }
-    setTodos([...todos, newTodo])
+
+    PushNotification.sendNotification(newTodo.title, newTodo.description, getAccessToken())
+    .then(response => {
+      console.log(response)
+      setTodos([...todos, newTodo])
+    })
+    
   }, [todos])
 
   const updateTodo = useCallback((id: number) => {

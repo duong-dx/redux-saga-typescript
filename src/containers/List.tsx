@@ -7,6 +7,7 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import '../features/contexts/scss/index.scss'
 import PushNotification from 'api/push-notification';
+import { getAccessToken } from '../hooks';
 
 const List:React.FC = () => {
   const [open, setOpen] = React.useState(false);
@@ -20,9 +21,8 @@ const List:React.FC = () => {
   };
 
   const handleClickTest = () => {
-    const token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2xvZ2luIiwiaWF0IjoxNjI4MTgwMzY1LCJleHAiOjE2Mjg3ODUxNjUsIm5iZiI6MTYyODE4MDM2NSwianRpIjoibTcyaVJGRnZYTm1pWFBiWiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.NEXex8Sh4K40OU4nRAcOJzSSnqEhSAubNpmKHZZ06q4'
 
-    PushNotification.testNotification(token)
+    PushNotification.testNotification(getAccessToken())
   }
   
   return <TodoProvide>
@@ -33,7 +33,7 @@ const List:React.FC = () => {
       onClick={handleClickOpen}
       variant="contained"
       size="large"
-      style={{ borderRadius: '50%', height: '70px', width: '70px', position: 'fixed', bottom: '40px', right: '40px' }}
+      style={{ borderRadius: '50%', height: '70px', width: '70px', position: 'fixed', bottom: '40px', right: '40px', zIndex: 1000 }}
       color='primary'>
       <BorderColorIcon/>
     </Button>
@@ -41,7 +41,7 @@ const List:React.FC = () => {
       onClick={handleClickTest}
       variant="contained"
       size="large"
-      style={{ borderRadius: '50%', height: '70px', width: '70px', position: 'fixed', bottom: '150px', right: '40px' }}
+      style={{ borderRadius: '50%', height: '70px', width: '70px', position: 'fixed', bottom: '150px', right: '40px', zIndex: 1000}}
       color='primary'>
       <NotificationsActiveIcon/>
     </Button>

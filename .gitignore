@@ -28,3 +28,5 @@ yarn-error.log*
 
 .sass-cache/
 *.css.map
+
+.cert

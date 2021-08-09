@@ -1,4 +1,3 @@
-import { SubscriptionEndPoint } from "../constants";
 import axiosClient from "./axiosClient";
 
 const PushNotification = {
@@ -13,6 +12,22 @@ const PushNotification = {
 
     testNotification: (accessToken: string) => {
         return axiosClient.get('/push', {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+    },
+
+    addDeviceToken: (deviceToke: string, accessToken: string) => {
+        return axiosClient.post('/update-device-token ', {device_token: deviceToke}, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+    },
+
+    sendNotification: (title: string, body: string, accessToken: string) => {
+        return axiosClient.post('/send-notifications ', {title: title, body: body}, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }
