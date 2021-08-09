@@ -5,7 +5,7 @@ import Card from './card';
 import { Icon } from '@iconify/react';
 import featherMoon from '@iconify/icons-mdi/moon-and-stars';
 import sun from '@iconify/icons-mdi/sun-advisory';
-import { Song } from '../../../contansts';
+import { Song } from '../../../constants';
 import anhNy from '../../contexts/images/anh12.jpeg'
 import '../scss/list.scss'
 

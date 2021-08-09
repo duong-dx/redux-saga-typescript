@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import TodoContext, {ITodo} from "./TodoContext";
 import Anh1 from './images/45397717_770116720001183_4599763792030494306_n-960x640.jpeg'
 import Anh2 from './images/anh1.jpeg'
@@ -19,21 +19,25 @@ import Anh16 from './images/anh18.jpeg'
 import Anh17 from './images/anh19.jpeg'
 import Anh18 from './images/anh20.jpeg'
 import NY from './images/ny.jpg'
-const TodoProvide:React.FC = ({ children }) => {
-  const images: Array<any> =
+import PushNotification from 'api/push-notification';
+import { getAccessToken } from '../../hooks/index';
+
+const images: Array<any> =
     [Anh1, Anh2, Anh3, Anh4, Anh5, Anh6, Anh7, Anh8, Anh9, Anh10, Anh11, Anh12, Anh13, Anh14 , Anh15, Anh16, Anh17, Anh18]
-  
-  const randomImage = () => {
-    const index:number = Math.floor(Math.random() * (images.length))
-    return images[index]
-  }
-  
-  const dateNow = new Date()
-  
-  const randomBackgroundColor = ():string => {
-    return Math.floor(Math.random()*16777215).toString(16);
-  }
-  
+
+const dateNow = new Date()
+
+const randomImage = () => {
+  const index:number = Math.floor(Math.random() * (images.length))
+  return images[index]
+}
+
+
+const randomBackgroundColor = ():string => {
+  return Math.floor(Math.random()*16777215).toString(16);
+}
+
+const TodoProvide:React.FC = ({ children }) => {
   const [todos, setTodos] = React.useState<ITodo[]>([
     {
       id: 1,
@@ -67,28 +71,34 @@ const TodoProvide:React.FC = ({ children }) => {
     },
   ]);
   
-  const saveTodo = (todo: ITodo) => {
+  const saveTodo = useCallback((todo: ITodo) => {
     const newTodo: ITodo = {
       id: Math.floor((Math.random() * 10000)), // not really unique - but fine for this example
       name: todo ? todo.name : 'Ẩn danh' ,
       title: todo ? todo.title : 'Bạn đã không nhập trường này' ,
       description: todo ? todo.description : 'Bạn đã không nhập trường này',
-      time: dateNow,
+      time: new Date(),
       status: false,
       image: randomImage(),
       color: randomBackgroundColor()
     }
+
+    PushNotification.sendNotification(newTodo.title, newTodo.description, getAccessToken())
+    .then(response => {
+      console.log(response)
+      setTodos([...todos, newTodo])
+    })
     
-    setTodos([...todos, newTodo])
-  }
-  const updateTodo = (id: number) => {
+  }, [todos])
+
+  const updateTodo = useCallback((id: number) => {
     todos.filter((todo: ITodo) => {
       if (todo.id === id) {
         todo.status = !todo.status
         setTodos([...todos])
       }
     })
-  }
+  }, [todos])
   
   return (
     <TodoContext.Provider value={{todos, saveTodo, updateTodo}}>

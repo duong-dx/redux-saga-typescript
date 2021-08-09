@@ -1,11 +1,11 @@
 import React from 'react';
 import './scss/custom-buttom1.scss'
-
-const CustomButton1:React.FC<{ handleSave: any }> = (props) => {
+interface Props { children: string, handleSave: () => void }
+const CustomButton1:React.FC<Props> = (props) => {
   const {handleSave} = props
   return (
     <>
-      <button onClick={handleSave} className="blob-btn">
+      <button onClick={() => handleSave()} className="blob-btn">
         {props.children}
         <span className="blob-btn__inner">
           <span className="blob-btn__blobs">
@@ -31,4 +31,4 @@ const CustomButton1:React.FC<{ handleSave: any }> = (props) => {
   );
 }
 
-export default CustomButton1;
+export default React.memo(CustomButton1);
