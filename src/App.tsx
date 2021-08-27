@@ -30,7 +30,6 @@ const App: React.FC = () => {
   });
 
   message.onMessage((payload) => {
-    console.log(payload)
     if(!payload?.notification) {
       setStateData({...stateData, open: true, severity: 'error'})
       return;

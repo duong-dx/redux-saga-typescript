@@ -1,11 +1,10 @@
 import React from 'react';
 import './scss/custom-buttom1.scss'
-interface Props { children: string, handleSave: () => void }
+interface Props { children: string }
 const CustomButton1:React.FC<Props> = (props) => {
-  const {handleSave} = props
   return (
     <>
-      <button onClick={() => handleSave()} className="blob-btn">
+      <button type='submit' className="blob-btn">
         {props.children}
         <span className="blob-btn__inner">
           <span className="blob-btn__blobs">
