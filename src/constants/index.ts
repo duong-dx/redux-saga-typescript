@@ -24,40 +24,63 @@ export interface SubscriptionEndPoint  {
 }
 
 export interface router {
-  url: string,
+  key: string | number,
+  path: string,
   component: string
   auth: boolean
 }
 
 export const listRouter: Array<router> = [
   {
-    url: 'list',
+    key: 1,
+    path: '/list',
     component: 'List',
     auth: true
   },
   {
-    url: 'test',
+    key: 2,
+    path: '/test',
     component: 'test',
-    auth: false
+    auth: true
   },
   {
-    url: 'posts',
+    key: 3,
+    path: '/posts',
     component: 'post',
     auth: true
   },
   {
-    url: 'posts/create',
+    key: 4,
+    path: '/posts/create',
     component: 'create-post',
     auth: true
   },
   {
-    url: 'music',
+    key: 5,
+    path: '/music',
     component: 'music-index',
     auth: true
   },
   {
-    url: 'player',
+    key: 6,
+    path: '/player',
     component: 'player',
     auth: true
   },
+  {
+    key: 7,
+    path: '/sign-in',
+    component: 'login',
+    auth: false
+  },
 ];
+
+export const STYLE_LOADER = {
+  minHeight: '100vh',
+  justifyContent: "center",
+  display: 'flex',
+  alignItems:'center',
+  margin: 'auto'
+}
+
+export const COLOR_LOADER:string = 'linear-gradient(#0259af,rgb(144 205 228 / 80%))'

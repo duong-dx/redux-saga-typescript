@@ -44,7 +44,6 @@ export function register(config?: Config) {
         // ? 'firebase-messaging-sw.js'
         // : 'custom-sw.js'
       const swUrl = `${process.env.PUBLIC_URL}/${swFileName}`;
-      console.log(swUrl)
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.

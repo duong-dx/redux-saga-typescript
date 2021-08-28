@@ -1,15 +1,12 @@
 import {all} from 'redux-saga/effects'
 import counterSaga from '../features/counter/counterSaga';
 import postSaga from '../features/posts/redux/postSaga'
-function* helloSaga() {
-  console.log('hello Saga')
-}
+import authSaga from '../features/auth/authSaga';
 
 export default  function* rootSaga() {
-  console.log('root saga')
   yield all([
-    helloSaga(),
     counterSaga(),
-    postSaga()
+    postSaga(),
+    authSaga()
   ])
 }

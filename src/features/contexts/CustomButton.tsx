@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {ReactChild, ReactChildren} from 'react';
 import './scss/index.scss'
-
-const CustomButton:React.FC = ({ children }) => {
+interface Props {
+  handleClick: () => void
+  children: ReactChild | ReactChildren;
+}
+const CustomButton:React.FC<Props> = (props) => {
+  const {handleClick, children} = props
   return (
-    <button className='custom-button'><span>{children}</span></button>
+    <button onClick={handleClick} className='custom-button'><span>{children}</span></button>
   );
 }
 

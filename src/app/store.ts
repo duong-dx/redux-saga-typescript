@@ -3,15 +3,28 @@ import counterReducer from '../features/counter/counterSlice';
 import postReducer from '../features/posts/redux/postSlice';
 import createSagaMiddleware  from 'redux-saga'
 import rootSaga from "./rootSaga";
+import authReducer from '../features/auth/authSlice';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { combineReducers } from 'redux'
+import { MemoryHistory } from 'history';
+import {history} from '../utils';
+
+const createRootReducer = (history: MemoryHistory) => combineReducers({
+  router: connectRouter(history),
+})
+
+const rootReducer = combineReducers({
+  router: connectRouter(history),
+  counter: counterReducer,
+  posts: postReducer,
+  auth: authReducer,
+})
 
 const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-    posts: postReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sagaMiddleware),
+    getDefaultMiddleware().concat(sagaMiddleware, routerMiddleware(history)),
 });
 
 sagaMiddleware.run(rootSaga)

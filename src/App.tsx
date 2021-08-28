@@ -4,6 +4,11 @@ import  MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import firebase, {message} from './firebase'
 import PushNotification from 'api/push-notification';
 import { getAccessToken } from './hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { authAction } from "./features/auth/authSlice"
+import { ExitToApp } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
+import { RootState } from './app/store';
 
 export interface State extends SnackbarOrigin {
   open: boolean;
@@ -20,7 +25,8 @@ function Alert(props: AlertProps) {
 }
 
 const App: React.FC = () => {
-
+  const auth = useSelector((state: RootState) => state.auth)
+  const dispatch = useDispatch()
   const [dataNotify, setDataNotify] = useState<Notification>({title: '', body: ''});
   const [stateData, setStateData] = useState<State>({
     open: false,
@@ -62,8 +68,33 @@ const App: React.FC = () => {
 
   const { vertical, horizontal, open } = stateData;
 
+  const handleClick = useCallback(() => {
+    dispatch(authAction.logout())
+  }, [])
+
   return (
     <div>
+      {auth.isLoggedIn &&
+        <Button
+          onClick={handleClick}
+          variant="contained"
+          size="large"
+          style={
+            {
+              backgroundColor: 'red',
+              borderRadius: '50%',
+              height: '70px',
+              width: '70px',
+              position: 'fixed',
+              top: '40px',
+              right: '40px',
+              zIndex: 1000
+            }
+          }
+          color='primary'>
+          <ExitToApp/>
+        </Button>
+      }
       <Snackbar
         anchorOrigin={{ vertical, horizontal }}
         open={open}

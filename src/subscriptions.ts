@@ -30,12 +30,6 @@ export function subscribeUser() {
     })
     .then((pushSubscription) => {
         PushNotification.pushEndPointDevice(token, pushSubscription)
-        .then(response => {
-          console.log(response) 
-        })
-        .catch(error => {
-          console.log(error) 
-        })
     })
     // .catch((error) => {
     //   console.log('looix roi', error)
