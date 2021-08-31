@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -8,15 +8,19 @@ import * as serviceWorker from './serviceWorker';
 import themes from './Styles/theme';
 import { MuiThemeProvider } from '@material-ui/core';
 import {subscribeUser} from "./subscriptions"
-import RouterComponent from './Router/index';
+import { ConnectedRouter} from 'connected-react-router';
+import {history} from './utils';
+import RouterComponent from './Router'
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <MuiThemeProvider theme={themes}>
-        <App />
-        <RouterComponent/> 
-      </MuiThemeProvider>
+      <ConnectedRouter history={history}>
+        <MuiThemeProvider theme={themes}>
+          <App />
+          <RouterComponent />
+        </MuiThemeProvider>
+      </ConnectedRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -85,7 +85,6 @@ const TodoProvide:React.FC = ({ children }) => {
 
     PushNotification.sendNotification(newTodo.title, newTodo.description, getAccessToken())
     .then(response => {
-      console.log(response)
       setTodos([...todos, newTodo])
     })
     

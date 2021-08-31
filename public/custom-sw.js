@@ -8,7 +8,6 @@ self.addEventListener('push', event => {
   }
   if (event.data) {
     const data = event.data.json()
-    console.log('New notification', data)
     const options = {
       body: data.body,
       icon: data.icon,
