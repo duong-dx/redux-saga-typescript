@@ -50,15 +50,18 @@ const App: React.FC = () => {
   useEffect(() => {
     const messaging = firebase.messaging()
     messaging.requestPermission()
-    .then(() => {
-      return messaging.getToken()
-    })
-    .then(token => {
-      return PushNotification.addDeviceToken(token, getAccessToken())
-    })
-    .then(response => {
-      console.log(response)
-    }) 
+      .then(() => {
+        return messaging.getToken()
+      })
+      .then(token => {
+        return PushNotification.addDeviceToken(token, getAccessToken())
+      })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(function(err) {
+        console.log('Unable to get permission to notify.', err);
+      });
   }, [])
 
   

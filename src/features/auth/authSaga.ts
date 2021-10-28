@@ -33,7 +33,7 @@ function* handleLogin(payload: LoginPayload)
   } catch(error) {
     const {response}: {response: AxiosResponse} = error
     yield put(authAction.logout())
-    if (response?.status === 422) {
+    if ([422, 401].indexOf(response?.status ) >= 0) {
       yield put(authAction.loginFailed('Tài khoản hoặc mật khẩu không chính xác'))
     } else {
       yield put(authAction.loginFailed('Đã có lỗi xảy ra'))

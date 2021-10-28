@@ -73,6 +73,12 @@ export const listRouter: Array<router> = [
     component: 'login',
     auth: false
   },
+  {
+    key: 7,
+    path: '/chat',
+    component: 'chat',
+    auth: true
+  },
 ];
 
 export const STYLE_LOADER = {
