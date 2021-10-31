@@ -8,6 +8,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { combineReducers } from 'redux'
 import { MemoryHistory } from 'history';
 import {history} from '../utils';
+import chatReducer from "../features/chats/chatSlide"
 
 const createRootReducer = (history: MemoryHistory) => combineReducers({
   router: connectRouter(history),
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   counter: counterReducer,
   posts: postReducer,
   auth: authReducer,
+  chat: chatReducer,
 })
 
 const sagaMiddleware = createSagaMiddleware()
