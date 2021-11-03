@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from '../../hooks';
 import { chatActions } from './chatSlide';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { authAction, LoginPayload } from '../auth/authSlice';
+import { authAction } from '../auth/authSlice';
 import { EventChannel, eventChannel, Task } from 'redux-saga';
 import { getToken, getUser } from '../../repositories/localStorage/get';
 
@@ -91,6 +91,7 @@ function* handleIO(socket: Socket) {
 }
 
 function* flowSocket() {
+  console.log(999999);
   const socket: Socket = yield call(connect)
 
   const task: Task = yield fork(handleIO, socket)
@@ -110,7 +111,6 @@ function* flow() {
       yield call(flowSocket)
     } else {
       yield take(authAction.loginSuccess)
-      
       yield call(flowSocket)
     }
   }

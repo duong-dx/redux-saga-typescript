@@ -1,8 +1,8 @@
-const setUser = (user) => {
+const setUser = (user: any) => {
 	localStorage.setItem("user", JSON.stringify(user));
 }
 
-const setToken = (token) => {
+const setToken = (token: any) => {
 	localStorage.setItem("token", token);
 }
 

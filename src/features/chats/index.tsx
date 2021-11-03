@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { chatActions, chatSlice, ChatState } from './chatSlide';
+import { getUser } from '../../repositories/localStorage/get';
 
 // interface conversationInterface {id: number, title: string}
 const Index: React.FC = () => {
@@ -12,7 +13,7 @@ const Index: React.FC = () => {
   const [message, setMessage] = useState('')
 
   const sendData = () => {
-    dispatch(chatActions.sendMessage({ message, room: 'room1' }))
+    dispatch(chatActions.sendMessage({ message, conversation_id: 1, user_id: getUser().id }))
     setMessage('')
   }
 

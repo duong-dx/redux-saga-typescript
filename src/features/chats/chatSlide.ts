@@ -1,6 +1,5 @@
-import { getToken, getUser } from '../../repositories/localStorage/get';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { message } from '../../firebase';
+import { User } from '../../models/user';
 
 // export interface Message {
 //   id: number | string;
@@ -28,9 +27,27 @@ import { message } from '../../firebase';
 // }
 
 export interface Message {
-  room: number | string;
+  user_id: number | string;
+  conversation_id: number | string;
   message: string;
 }
+
+export interface Conversation {
+  users: User[];
+  messages: Message[];
+  id: number | string;
+  title: string;
+  description: string;
+  sending: boolean;
+  error: string;
+}
+
+export interface ListConversationState {
+  loading: boolean;
+  error: string;
+  conversations: Conversation[];
+}
+
 
 export interface ChatState {
   messages: Message[];
@@ -44,28 +61,14 @@ const initialState: ChatState = {
   error: '',
   messages: [],
 }
+
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    // sendMessage(state, action: PayloadAction<Message>) {
-    //   const getConversationById = state.conversations.find(e => e.id)
-    //   const index = state.conversations.findIndex(e => e.id)
-    //   const newConversation: Conversation = getConversationById ?
-    //     getConversationById.messages.push(action.payload) :
-    //     {
-    //       id: action.payload.conversation_id,
-    //       messages: [
-    //         action.payload
-    //       ]
-    //     };
-    //   if (index <= -1) {
-    //     return state;
-    //   }
-    //
-    //   return state.conversations[index] = newConversation;
-    // }
-
+    requestConversation(state) {
+      return state;
+    },
     sendMessage(state, action: PayloadAction<Message>) {
       state.sending = true
       console.log(state, 'chatSlide-sendMessage');
