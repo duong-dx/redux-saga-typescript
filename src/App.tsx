@@ -54,10 +54,12 @@ const App: React.FC = () => {
         return messaging.getToken()
       })
       .then(token => {
-        return PushNotification.addDeviceToken(token, getAccessToken())
+
+        //push client id to server
+        // return PushNotification.addDeviceToken(token, getAccessToken())
       })
       .then(response => {
-        console.log(response)
+        // console.log(response)
       })
       .catch(function(err) {
         console.log('Unable to get permission to notify.', err);

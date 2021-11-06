@@ -6,6 +6,9 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
   },
   listItem: {
     width: 450,
+    '&:hover': {
+      backgroundColor: '#EBF0F9',
+    },
   },
   avatar: {
     marginRight: 15,
@@ -34,6 +37,48 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
 
   avatarMargin: {
     marginRight: 15
+  },
+
+  parentConversation: {
+    display: 'flex',
+    height: '100vh'
+  },
+
+  conversations: {
+    width: '20%',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    borderRight: '1px solid #eeeeee',
+    '&::-webkit-scrollbar': {
+      width: '0.4em'
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.1)',
+      // outline: '1px solid slategrey',
+      borderRadius: '5px',
+    }
+  },
+
+  contentConversation: {
+    width: '80%',
+
+  },
+
+  headerContentConversation: {
+    display: 'flex',
+    with: '100%',
+
+    avatar: {
+      width: '20%',
+    },
+
+    title: {
+      textAlign: 'left',
+    }
   }
 }))
 
