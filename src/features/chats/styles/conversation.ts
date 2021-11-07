@@ -64,13 +64,49 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
   },
 
   contentConversation: {
+    height: '100%',
     width: '80%',
+    position: 'relative',
+  },
 
+  listMessages: {
+    padding: 20,
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    position: 'absolute',
+    height: '74%',
+    '&::-webkit-scrollbar': {
+      width: '0.4em'
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.1)',
+      // outline: '1px solid slategrey',
+      borderRadius: '5px',
+    }
+  },
+
+  input: {
+    padding: 20,
+    display: 'flex',
+    alignItems: 'center',
+    position: 'fixed',
+    bottom: 0,
+    width: '80%',
+    height: '8%',
+    backgroundColor: 'white',
+    borderTop: '1px solid #EEEEEE',
   },
 
   headerContentConversation: {
+    padding: 20,
     display: 'flex',
     with: '100%',
+    height: '6%',
+    borderBottom: '1px solid #EEEEEE',
 
     avatar: {
       width: '20%',
