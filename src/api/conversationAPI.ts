@@ -10,6 +10,25 @@ const postAPI = {
       }
     })
   },
+
+  getAllMessage(
+    accessToken: string,
+    conversationId: number | string,
+    take: number | null,
+    page: number | null,
+  ) {
+    const url = '/messages'
+    return axiosClient.get(url, {
+      params: {
+        conversation_id: conversationId,
+        take,
+        page,
+      },
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+  },
 }
 
 export default postAPI

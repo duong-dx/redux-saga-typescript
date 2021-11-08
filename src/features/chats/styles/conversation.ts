@@ -74,6 +74,7 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     position: 'absolute',
+    width: '97%',
     height: '74%',
     '&::-webkit-scrollbar': {
       width: '0.4em'

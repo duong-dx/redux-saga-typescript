@@ -30,6 +30,8 @@ export interface Message {
   user_id: number | string;
   conversation_id: number | string;
   message: string;
+  createdAt: Date | string | null;
+  updatedAt: Date | string | null;
 }
 
 export interface MessageError {
@@ -49,6 +51,7 @@ export interface Conversation {
   error: string;
   active: boolean;
   unread: number;
+  page: number;
 }
 
 export interface ListConversationState {
@@ -61,6 +64,12 @@ const initialState: ListConversationState = {
   loading: false,
   error: '',
   conversations: [],
+}
+
+export interface RequestMessage {
+  conversation_id: number | string,
+  take: number | null,
+  page: number | null,
 }
 
 export const chatSlice = createSlice({
@@ -90,9 +99,9 @@ export const chatSlice = createSlice({
       return state;
     },
 
-    requestMessages(state, action: PayloadAction<number | string>) {
+    requestMessages(state, action: PayloadAction<RequestMessage>) {
       state.conversations = state.conversations.map(conversation => {
-        if (conversation.id === action.payload) {
+        if (conversation.id === action.payload.conversation_id) {
           conversation.unread = 0;
           conversation.active = true;
         } else {
@@ -106,18 +115,30 @@ export const chatSlice = createSlice({
     },
 
     requestMessagesSuccess(state, action: PayloadAction<Message[]>) {
-      // state.loading = false;
-      // state.conversations = [
-      //   ...state.conversations,
-      //   ...action.payload
-      // ]
-      //
-      // return state;
+      const newConversation = state.conversations.map((conversation) => {
+        if (conversation.active === true) {
+          conversation.messages = conversation.messages ?
+            [
+              ...conversation.messages,
+              ...action.payload,
+            ] :
+            [...action.payload]
+          conversation.sending = false
+        }
+
+        console.log(conversation, 2222);
+        return conversation
+      })
+
+      state.conversations = newConversation;
+      console.log(newConversation, 'newConversation-sendMessageSuccess');
+
+      return state
     },
 
-    sendMessage(state, action: PayloadAction<Message>) {
-      const conversation: Conversation | undefined = state.conversations.find(e => e.id === action.payload.conversation_id)
-      const conversationIndex = state.conversations.findIndex(e => e.id === action.payload.conversation_id)
+    sendMessage: function(state, action: PayloadAction<Message>) {
+      const conversation: Conversation | undefined = state.conversations.find(e => e.id === action.payload.conversation_id);
+      const conversationIndex = state.conversations.findIndex(e => e.id === action.payload.conversation_id);
       const newConversation = {
         id: conversation?.id ?? null,
         title: conversation?.title ?? '',
@@ -128,9 +149,10 @@ export const chatSlice = createSlice({
         messages: conversation?.messages ?? [],
         sending: true,
         error: '',
-        active: false,
+        active: true,
         unread: 0,
-      }
+        page: 1,
+      };
 
       console.log(state, 'chatSlide-sendMessage');
       if (state.conversations.length === 0) {
@@ -140,17 +162,24 @@ export const chatSlice = createSlice({
       } else if (state.conversations && conversationIndex >= 0) {
         state.conversations[conversationIndex] = newConversation;
 
-        return state
+        return state;
       }
 
-      return state
+      return state;
     },
 
     sendMessageSuccess(state, action: PayloadAction<Message>) {
+      console.log(action.payload, 878787878);
       const newConversation = state.conversations.map((conversation) => {
         if (conversation.id === action.payload.conversation_id) {
-          conversation.messages.unshift(action.payload)
+          conversation.messages = conversation.messages ?
+            [
+              action.payload,
+              ...conversation.messages,
+            ] :
+            [action.payload]
           conversation.sending = false
+          conversation.active = true
         }
         return conversation
       })

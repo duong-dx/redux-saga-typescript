@@ -1,13 +1,14 @@
 import * as Effects from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from '../../hooks';
-import { chatActions, Conversation } from './chatSlide';
+import { chatActions, Conversation, Message, RequestMessage } from './chatSlide';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { authAction } from '../auth/authSlice';
 import { EventChannel, eventChannel, Task } from 'redux-saga';
 import { getToken, getUser } from '../../repositories/localStorage/get';
 import conversationAPI from '../../api/conversationAPI';
 import { takeEvery } from '@redux-saga/core/effects';
+import { message } from '../../firebase';
 
 const put: any = Effects.put;
 const call: any = Effects.call;
@@ -102,6 +103,14 @@ interface ResponseConversation {
     conversations: Conversation[]
   }
 }
+
+interface ResponseMessages {
+  data: {
+    page_total: number;
+    results: Message[];
+    total: Message[];
+  }
+}
 function* handleGetListConversation() {
   const token = getAccessToken();
   const response: ResponseConversation = yield call(conversationAPI.getAll, token)
@@ -115,8 +124,17 @@ function* handleGetListConversation() {
  * handle request messages
  */
 
-function* handleGetListMessages() {
-  console.log(2222229999);
+function* handleGetListMessages(action: PayloadAction<RequestMessage>) {
+  const token = getAccessToken();
+  const response: ResponseMessages = yield call(
+    conversationAPI.getAllMessage,
+    token,
+    action.payload.conversation_id,
+    action.payload.take,
+    action.payload.page,
+  )
+
+  yield put(chatActions.requestMessagesSuccess(response.data.results))
 }
 
 function* flow() {

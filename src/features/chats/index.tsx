@@ -13,7 +13,7 @@ const Index: React.FC = () => {
   const [message, setMessage] = useState('')
 
   const sendData = () => {
-    dispatch(chatActions.sendMessage({ message, conversation_id: 1, user_id: getUser().id }))
+    dispatch(chatActions.sendMessage({ message, conversation_id: 1, user_id: getUser().id, createdAt: null, updatedAt: null }))
     setMessage('')
   }
 

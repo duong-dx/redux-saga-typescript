@@ -7,16 +7,20 @@ import { RootState } from '../../../app/store';
 import ItemConversation from './item-conversation'
 import {MessageLeft, MessageRight} from './message';
 import TextInput from './TextInput';
+import { AuthState } from '../../auth/authSlice';
+import { message } from '../../../firebase';
+import moment from 'moment';
+import { getUser } from '../../../repositories/localStorage/get';
 
 // interface conversationInterface {id: number, title: string}
 const Index: React.FC = () => {
   const classes = ConversationStyle();
-  const [open, setOpen] = useState(false);
   const chat: ListConversationState = useSelector((state: RootState) => state.chat)
+  const auth: AuthState = useSelector((state: RootState) => state.auth)
   // const toggleDrawer = useCallback(() => {
   //   setOpen(!open)
   // }, [open])
-
+  console.log(chat);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +28,11 @@ const Index: React.FC = () => {
   }, [])
 
   const handleClickItem = useCallback((id) => {
-    dispatch(chatActions.requestMessages(id))
+    dispatch(chatActions.requestMessages({
+      conversation_id: id,
+      take: null,
+      page: null
+    }))
   }, [])
 
   const renderConversation = useCallback(() => {
@@ -37,6 +45,60 @@ const Index: React.FC = () => {
         />
     )
   }, [chat])
+
+  const renderContentConversation = useCallback(() => {
+    const conversationActive = chat.conversations.find(e => e.active);
+
+    if (conversationActive?.messages) {
+      return conversationActive.messages && conversationActive.messages.map(
+        (message, index) => {
+          const userName = conversationActive.users.find(e => message.user_id)
+          const momentObj = message.createdAt ? moment(message.createdAt) : moment();
+          const momentString = momentObj.format('YYYY-MM-DD hh:mm'); // 2016-07-15
+          if (message.user_id === auth.currentUser?.id) {
+            return (
+              <MessageRight
+                key={index}
+                message={message.message}
+                timestamp={momentString}
+                photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
+                displayName={userName?.name}
+                avatarDisp={false}
+              />
+            )
+          }
+
+          return (
+            <MessageLeft
+              key={index}
+              message={message.message}
+              timestamp={momentString}
+              photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
+              displayName={userName?.name}
+              avatarDisp={true}
+            />
+          )
+        }
+      )
+    }
+
+    return <></>
+
+  }, [chat, auth])
+
+  const sendData = (message: string) => {
+    const conversationActive = chat.conversations.find(e => e.active);
+
+    if (conversationActive?.id) {
+      dispatch(chatActions.sendMessage({
+        message,
+        conversation_id: conversationActive.id,
+        user_id: getUser().id,
+        createdAt: null,
+        updatedAt: null
+      }))
+    }
+  }
 
   return (
     (!chat || chat.loading) ? <div>Loading....................................</div> :
@@ -59,341 +121,10 @@ const Index: React.FC = () => {
       <div className={classes.contentConversation}>
         <div className={classes.headerContentConversation}>Conversation active</div>
         <div className={classes.listMessages}>
-          <MessageLeft
-            message="あめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          />
-          <MessageLeft
-            message="xxxxxhttps://yahoo.co.jp xxxxxxxxxあめんぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさいすせそ"
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName="テスト"
-            avatarDisp={false}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={true}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          /><MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          />
-          <MessageLeft
-            message="あめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          /><MessageLeft
-          message="あめんぼあかいなあいうえお"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        /><MessageLeft
-          message="あめんぼあかいなあいうえお"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        /><MessageLeft
-          message="あめんぼあかいなあいうえお"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        /><MessageLeft
-          message="あめんぼあかいなあいうえお"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        /><MessageLeft
-          message="あめんぼあかいなあいうえお"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        /><MessageLeft
-          message="あめんぼあかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          "
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName=""
-          avatarDisp={true}
-        />
-          <MessageRight
-            message="あめんぼあかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえお
-          かいなあいうえおかいなあいうえお
-          "
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          />
+          { renderContentConversation() }
         </div>
         <div className={classes.input}>
-          <TextInput />
+          <TextInput handleClick={sendData} />
         </div>
       </div>
     </div>
