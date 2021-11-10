@@ -27,6 +27,7 @@ import { User } from '../../models/user';
 // }
 
 export interface Message {
+  id: number;
   user_id: number | string;
   conversation_id: number | string;
   message: string;
@@ -52,18 +53,21 @@ export interface Conversation {
   active: boolean;
   unread: number;
   page: number;
+  loaded: boolean;
 }
 
 export interface ListConversationState {
   loading: boolean;
   error: string;
   conversations: Conversation[];
+  loaded: boolean;
 }
 
 const initialState: ListConversationState = {
   loading: false,
   error: '',
   conversations: [],
+  loaded: false,
 }
 
 export interface RequestMessage {
@@ -88,6 +92,7 @@ export const chatSlice = createSlice({
         ...state.conversations,
         ...action.payload
       ]
+      state.loaded = true;
 
       return state;
     },
@@ -115,7 +120,7 @@ export const chatSlice = createSlice({
     },
 
     requestMessagesSuccess(state, action: PayloadAction<Message[]>) {
-      const newConversation = state.conversations.map((conversation) => {
+      state.conversations = state.conversations.map((conversation) => {
         if (conversation.active === true) {
           conversation.messages = conversation.messages ?
             [
@@ -124,17 +129,30 @@ export const chatSlice = createSlice({
             ] :
             [...action.payload]
           conversation.sending = false
+          conversation.loaded = true
         }
 
-        console.log(conversation, 2222);
         return conversation
-      })
-
-      state.conversations = newConversation;
-      console.log(newConversation, 'newConversation-sendMessageSuccess');
+      });
 
       return state
     },
+
+    activeConversation(state, action: PayloadAction<number>) {
+      state.conversations = state.conversations.map(conversation => {
+        if (conversation.id === action.payload) {
+          conversation.unread = 0;
+          conversation.active = true;
+        } else {
+          conversation.active = false;
+        }
+
+        return conversation;
+      })
+
+      return state;
+    },
+
 
     sendMessage: function(state, action: PayloadAction<Message>) {
       const conversation: Conversation | undefined = state.conversations.find(e => e.id === action.payload.conversation_id);
@@ -152,9 +170,9 @@ export const chatSlice = createSlice({
         active: true,
         unread: 0,
         page: 1,
+        loaded: conversation?.loaded ?? false,
       };
 
-      console.log(state, 'chatSlide-sendMessage');
       if (state.conversations.length === 0) {
         state.conversations.push(newConversation);
 
@@ -169,38 +187,33 @@ export const chatSlice = createSlice({
     },
 
     sendMessageSuccess(state, action: PayloadAction<Message>) {
-      console.log(action.payload, 878787878);
-      const newConversation = state.conversations.map((conversation) => {
+      state.conversations = state.conversations.map((conversation) => {
         if (conversation.id === action.payload.conversation_id) {
-          conversation.messages = conversation.messages ?
-            [
-              action.payload,
-              ...conversation.messages,
-            ] :
-            [action.payload]
+          if (conversation.loaded) {
+            conversation.messages = conversation.messages ?
+              [
+                action.payload,
+                ...conversation.messages,
+              ] :
+              [action.payload]
+          }
           conversation.sending = false
-          conversation.active = true
+          // conversation.active = true
         }
         return conversation
-      })
-
-      state.conversations = newConversation;
-      console.log(newConversation, 'newConversation-sendMessageSuccess');
+      });
 
       return state
     },
 
     sendMessageError(state, action: PayloadAction<MessageError>) {
-      const newConversation = state.conversations.map((conversation) => {
+      state.conversations = state.conversations.map((conversation) => {
         if (conversation.id === action.payload.conversation_id) {
           conversation.sending = false
           conversation.error = action.payload.error
         }
         return conversation
-      })
-
-      state.conversations = newConversation;
-      console.log(newConversation, 'newConversation-sendMessageSuccess');
+      });
 
       return state
     }

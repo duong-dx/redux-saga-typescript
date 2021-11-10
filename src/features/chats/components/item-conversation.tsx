@@ -67,7 +67,7 @@ const Index: React.FC<Props> = (props) => {
 
   const handleExpandClick = useCallback(() => {
     props.handleClick(props.conversation.id);
-  }, [props.conversation.id]);
+  }, [props.conversation]);
 
   return (
     <List onClick={handleExpandClick}>
