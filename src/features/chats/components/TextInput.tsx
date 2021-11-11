@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import Button from '@material-ui/core/Button';
-import { Conversation } from '../chatSlide';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,7 +29,8 @@ const TextInput: React.FC<Props> = (props) => {
   const [message, setMessage] = useState('')
   const {handleClick} = props
 
-  const handleClickButton = () => {
+  const handleClickButton = (event: React.FormEvent<HTMLElement>) => {
+    event.preventDefault();
     if (message.length > 0) {
       handleClick(message)
     }
@@ -39,19 +39,19 @@ const TextInput: React.FC<Props> = (props) => {
   }
   return (
     <>
-      <div className={classes.wrapForm}>
+      <form onSubmit={handleClickButton} className={classes.wrapForm}>
         <TextField
           id="standard-text"
-          label="メッセージを入力"
+          label="Nhập tin nhắn"
           className={classes.wrapText}
           value={message}
           onChange={(event => setMessage(event.target.value))}
           //margin="normal"
         />
-        <Button onClick={handleClickButton} variant="contained" color="primary" className={classes.button}>
+        <Button type='submit' variant="contained" color="primary" className={classes.button}>
           <SendIcon />
         </Button>
-      </div>
+      </form>
     </>
   )
 }

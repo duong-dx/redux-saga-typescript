@@ -61,7 +61,7 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
       backgroundColor: 'rgba(0,0,0,.1)',
       // outline: '1px solid slategrey',
       borderRadius: '5px',
-    }
+    },
   },
 
   contentConversation: {

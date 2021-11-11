@@ -41,7 +41,6 @@ export const postSlice = createSlice({
 
     addList(state: ListPost, action: PayloadAction<ListPost>) {
       state = action.payload
-      console.log(state, action, 'addList - postSlice');
       return state
     },
 

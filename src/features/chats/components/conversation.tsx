@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ConversationStyle from '../styles/conversation';
-import { chatActions, ListConversationState } from '../chatSlide';
+import { chatActions, Conversation, ListConversationState } from '../chatSlide';
 import { RootState } from '../../../app/store';
 import ItemConversation from './item-conversation'
 import {MessageLeft, MessageRight} from './message';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import { getUser } from '../../../repositories/localStorage/get';
 import Anh10 from '../../../assets/images/10.jpg';
 import SortData from './sort-data';
+import conversation from '../styles/conversation';
 
 const Index: React.FC = () => {
   const classes = ConversationStyle();
@@ -25,19 +26,57 @@ const Index: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if(lastBox.current) {
-      lastBox.current.scrollIntoView();
+    const list: HTMLElement | null = document.getElementById('list-messages')
+    const conversationActive: Conversation | undefined = chat.conversations.find(e => e.active);
+
+    if (!list || !conversationActive) {
+      return;
     }
+
+    if (conversationActive.scrollHeight) {
+      list.scrollTo(0, list.scrollHeight - conversationActive.scrollHeight);
+    } else {
+      handleScrollBottom()
+    }
+
   }, [chat.conversations])
 
+  useEffect(() => {
+    const list: HTMLElement | null = document.getElementById('list-messages')
+    if (!list) {
+      return;
+    }
+
+    const loadData = () => {
+      const conversationActive: Conversation | undefined = chat.conversations.find(e => e.active);
+      if (!conversationActive) {
+        return;
+      }
+
+      const flag = conversationActive.messages.length < conversationActive.total;
+      // đúng sẽ là list.offsetTop === list.scrollTop
+      if (flag && list.scrollTop === 0) {
+        dispatch(chatActions.requestMessages({
+          conversation_id: conversationActive.id,
+          page: conversationActive.page + 1,
+          scrollHeight: list.scrollHeight
+        }))
+      }
+    }
+    list.addEventListener('scroll', loadData);
+
+    return () => {
+      list.removeEventListener('scroll', loadData)
+    }
+  }, [chat.conversations])
   const handleClickItem = (id: any) => {
     const conversation = chat.conversations.find(e => e.id === id);
 
     if (conversation && !conversation.loaded) {
       dispatch(chatActions.requestMessages({
         conversation_id: id,
-        take: null,
-        page: null
+        page: 1,
+        scrollHeight: null,
       }))
     } if (conversation && conversation.loaded) {
       dispatch(chatActions.activeConversation(id))
@@ -95,11 +134,17 @@ const Index: React.FC = () => {
 
   }, [chat, auth])
 
+  const handleScrollBottom = () => {
+    if(lastBox.current) {
+      lastBox.current.scrollIntoView();
+    }
+  }
+
   const sendData = (message: string) => {
     const conversationActive = chat.conversations.find(e => e.active);
 
     if (conversationActive?.id) {
-      const lastMessageId = conversationActive.messages ? conversationActive.messages.slice(-1)[0].id : 1;
+      const lastMessageId = conversationActive.messages.length > 0 ? conversationActive.messages.slice(-1)[0].id : 1;
       dispatch(chatActions.sendMessage({
         message,
         id: lastMessageId + 1,
@@ -109,6 +154,7 @@ const Index: React.FC = () => {
         updatedAt: null
       }))
     }
+    handleScrollBottom()
   }
 
   return (
@@ -120,7 +166,7 @@ const Index: React.FC = () => {
       </div>
       <div className={classes.contentConversation}>
         <div className={classes.headerContentConversation}>Conversation active</div>
-        <div className={classes.listMessages}>
+        <div id={'list-messages'} className={classes.listMessages}>
           { renderContentConversation() }
           <div ref={lastBox} />
         </div>

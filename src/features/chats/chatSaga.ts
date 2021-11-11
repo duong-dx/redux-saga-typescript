@@ -29,9 +29,7 @@ function connect() {
 
   return new Promise(resolve => {
     socket.on('connect', () => {
-      socket.emit('room', 'room1');
-      console.log("Socket connected");
-
+      // socket.emit('room', 'room1');
       resolve(socket);
     });
   })
@@ -82,7 +80,6 @@ function* flowSocket() {
   yield take(authAction.logout.type)
   yield cancel(task)
 
-  console.log('cancel(task)')
 }
 
 /**
@@ -108,7 +105,7 @@ interface ResponseMessages {
   data: {
     page_total: number;
     results: Message[];
-    total: Message[];
+    total: number;
   }
 }
 function* handleGetListConversation() {
@@ -130,11 +127,15 @@ function* handleGetListMessages(action: PayloadAction<RequestMessage>) {
     conversationAPI.getAllMessage,
     token,
     action.payload.conversation_id,
-    action.payload.take,
     action.payload.page,
   )
 
-  yield put(chatActions.requestMessagesSuccess(response.data.results))
+  yield put(chatActions.requestMessagesSuccess({
+    messages: response.data.results,
+    page: action.payload.page,
+    total: response.data.total,
+    scrollHeight: action.payload.scrollHeight,
+  }))
 }
 
 function* flow() {

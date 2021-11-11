@@ -12,7 +12,6 @@ import Anh10 from '../../../assets/images/10.jpg'
 import { Conversation } from '../chatSlide';
 import { Notifications } from '@material-ui/icons';
 
-// interface conversationInterface {id: number, title: string}
 interface Props {
   conversation: Conversation,
   handleClick: (id: number | string | null) => any
@@ -44,7 +43,6 @@ const Index: React.FC<Props> = (props) => {
   }, [props.conversation.users])
 
   const renderText = useCallback(() => {
-
       if (!props.conversation.active && props.conversation.unread > 0) {
         return (
           <>

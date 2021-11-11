@@ -1,31 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../models/user';
 
-// export interface Message {
-//   id: number | string;
-//   user_id: number | string;
-//   conversation_id: number | string;
-//   status: boolean | null;
-//   message: string;
-// }
-
-// export interface Conversation {
-//   id: number | string;
-//   messages: Message[];
-// }
-//
-// interface ChatState {
-//   conversations: Conversation[];
-//   sending: boolean;
-//   error: string;
-// }
-//
-// const initialState: ChatState = {
-//   sending: false,
-//   error: '',
-//   conversations: [],
-// }
-
 export interface Message {
   id: number;
   user_id: number | string;
@@ -43,7 +18,7 @@ export interface MessageError {
 export interface Conversation {
   users: User[];
   messages: Message[];
-  id: number | string | null;
+  id: number;
   title: string | null;
   description: string | null;
   background: string | null;
@@ -53,6 +28,8 @@ export interface Conversation {
   active: boolean;
   unread: number;
   page: number;
+  total: number,
+  scrollHeight: number | null,
   loaded: boolean;
 }
 
@@ -72,8 +49,15 @@ const initialState: ListConversationState = {
 
 export interface RequestMessage {
   conversation_id: number | string,
-  take: number | null,
-  page: number | null,
+  page: number,
+  scrollHeight: number | null,
+}
+
+export interface RequestMessageSuccess {
+  messages: Message[];
+  page: number;
+  total: number;
+  scrollHeight: number | null,
 }
 
 export const chatSlice = createSlice({
@@ -119,17 +103,20 @@ export const chatSlice = createSlice({
       return state;
     },
 
-    requestMessagesSuccess(state, action: PayloadAction<Message[]>) {
+    requestMessagesSuccess(state, action: PayloadAction<RequestMessageSuccess>) {
       state.conversations = state.conversations.map((conversation) => {
         if (conversation.active === true) {
           conversation.messages = conversation.messages ?
             [
               ...conversation.messages,
-              ...action.payload,
+              ...action.payload.messages,
             ] :
-            [...action.payload]
+            [...action.payload.messages]
           conversation.sending = false
           conversation.loaded = true
+          conversation.total = action.payload.total
+          conversation.page = action.payload.page
+          conversation.scrollHeight = action.payload.scrollHeight
         }
 
         return conversation
@@ -158,7 +145,7 @@ export const chatSlice = createSlice({
       const conversation: Conversation | undefined = state.conversations.find(e => e.id === action.payload.conversation_id);
       const conversationIndex = state.conversations.findIndex(e => e.id === action.payload.conversation_id);
       const newConversation = {
-        id: conversation?.id ?? null,
+        id: conversation?.id ?? 1,
         title: conversation?.title ?? '',
         emoji: conversation?.emoji ?? '',
         background: conversation?.background ?? '',
@@ -169,7 +156,9 @@ export const chatSlice = createSlice({
         error: '',
         active: true,
         unread: 0,
-        page: 1,
+        page: conversation?.page ?? 1,
+        total: conversation?.total ?? 0,
+        scrollHeight: null,
         loaded: conversation?.loaded ?? false,
       };
 
