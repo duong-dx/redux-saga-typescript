@@ -14,18 +14,18 @@ import RouterComponent from './Router'
 import {socket, SocketContext} from './app/context';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <SocketContext.Provider value={{socket}}>
+        {/*<SocketContext.Provider value={{socket}}>*/}
           <MuiThemeProvider theme={themes}>
             <App />
             <RouterComponent />
           </MuiThemeProvider>
-        </SocketContext.Provider>
+        {/*</SocketContext.Provider>*/}
       </ConnectedRouter>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

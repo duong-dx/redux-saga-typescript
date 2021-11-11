@@ -9,7 +9,6 @@ import { User } from '../../models/user'
 import { push } from 'connected-react-router';
 import { clearToken, clearUser } from '../../repositories/localStorage/clear';
 
-const takeEvery: any = Effects.takeEvery
 const put: any = Effects.put;
 const call: any = Effects.call;
 const fork: any = Effects.fork;

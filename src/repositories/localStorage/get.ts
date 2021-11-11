@@ -1,5 +1,5 @@
 const getUser = () => {
-	return JSON.parse(localStorage.getItem("user"))
+	return JSON.parse(<string>localStorage.getItem("user"))
 }
 
 const getToken= () => {

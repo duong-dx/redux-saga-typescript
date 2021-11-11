@@ -1,11 +1,14 @@
 import * as Effects from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from '../../hooks';
-import { chatActions } from './chatSlide';
+import { chatActions, Conversation, Message, RequestMessage } from './chatSlide';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { authAction, LoginPayload } from '../auth/authSlice';
+import { authAction } from '../auth/authSlice';
 import { EventChannel, eventChannel, Task } from 'redux-saga';
 import { getToken, getUser } from '../../repositories/localStorage/get';
+import conversationAPI from '../../api/conversationAPI';
+import { takeEvery } from '@redux-saga/core/effects';
+import { message } from '../../firebase';
 
 const put: any = Effects.put;
 const call: any = Effects.call;
@@ -13,10 +16,9 @@ const fork: any = Effects.fork;
 const take: any = Effects.take;
 const cancel: any = Effects.cancel;
 
-export interface MessagePayload {
-  message: string,
-  room: string,
-}
+/**
+ * handle socket
+ */
 
 function connect() {
   const token = getAccessToken();
@@ -27,30 +29,10 @@ function connect() {
 
   return new Promise(resolve => {
     socket.on('connect', () => {
-      socket.emit('room', 'room1');
-      console.log("Socket connected");
-
+      // socket.emit('room', 'room1');
       resolve(socket);
     });
   })
-}
-
-function* receivedMessage(socket: Socket) {
-  const message: MessagePayload = yield call(listenServer, socket);
-
-  while (true) {
-    yield put(chatActions.sendMessageSuccess, message)
-  }
-}
-
-function* listenServer(socket: Socket) {
-  return new Promise((resolve, reject) => {
-    if (!socket) return reject('No socket connection.');
-
-    socket.on('message-received', (message: MessagePayload) => {
-      resolve(message);
-    });
-  });
 }
 
 function subscribe(socket: Socket) {
@@ -98,7 +80,62 @@ function* flowSocket() {
   yield take(authAction.logout.type)
   yield cancel(task)
 
-  console.log('cancel(task)')
+}
+
+/**
+ * end handle socket
+ */
+
+/**
+ * handle conversation
+ */
+
+interface ResponseConversation {
+  data: {
+    name: string | null;
+    id: number | string | null;
+    email: string | null;
+    createAt: Date | string | null;
+    updateAt: Date | string | null;
+    conversations: Conversation[]
+  }
+}
+
+interface ResponseMessages {
+  data: {
+    page_total: number;
+    results: Message[];
+    total: number;
+  }
+}
+function* handleGetListConversation() {
+  const token = getAccessToken();
+  const response: ResponseConversation = yield call(conversationAPI.getAll, token)
+  const { conversations } = response.data;
+
+  yield put(chatActions.requestConversationSuccess(conversations))
+}
+//end handleGetListConversation
+
+/**
+ * handle request messages
+ */
+
+function* handleGetListMessages(action: PayloadAction<RequestMessage>) {
+  const token = getAccessToken();
+  const response: ResponseMessages = yield call(
+    conversationAPI.getAllMessage,
+    token,
+    action.payload.conversation_id,
+    action.payload.page,
+  )
+
+  yield put(chatActions.requestMessagesSuccess({
+    messages: response.data.results,
+    page: action.payload.page,
+    total: response.data.total,
+    scrollHeight: action.payload.scrollHeight,
+  }))
 }
 
 function* flow() {
@@ -106,11 +143,14 @@ function* flow() {
     const isLoggedIn = Boolean(getToken())
     const currentUser = Boolean(getUser());
 
+    yield takeEvery(chatActions.requestConversation, handleGetListConversation)
+
+    yield takeEvery(chatActions.requestMessages, handleGetListMessages)
+
     if (isLoggedIn && currentUser) {
       yield call(flowSocket)
     } else {
       yield take(authAction.loginSuccess)
-      
       yield call(flowSocket)
     }
   }
