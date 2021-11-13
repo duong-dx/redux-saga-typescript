@@ -26,7 +26,6 @@ export interface Conversation {
   sending: boolean;
   error: string;
   active: boolean;
-  unread: number;
   page: number;
   total: number,
   scrollHeight: number | null,
@@ -60,6 +59,12 @@ export interface RequestMessageSuccess {
   scrollHeight: number | null,
 }
 
+export interface UpdateLastMessage {
+  message_id: number;
+  conversation_id: number;
+  user_id: number;
+}
+
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
@@ -88,14 +93,30 @@ export const chatSlice = createSlice({
       return state;
     },
 
+    updateLastMessage(state, action: PayloadAction<UpdateLastMessage>) {
+      state.conversations = state.conversations
+        ? state.conversations.map(conversation => {
+          return  {
+            ...conversation,
+            users: conversation.id === action.payload.conversation_id
+              ? conversation.users.map(user => {
+                  if (user.id === action.payload.user_id) {
+                    user.last_message_id = action.payload.message_id;
+                  }
+
+                  return user
+                })
+              : conversation.users
+          };
+        })
+        : []
+
+      return state;
+    },
+
     requestMessages(state, action: PayloadAction<RequestMessage>) {
       state.conversations = state.conversations.map(conversation => {
-        if (conversation.id === action.payload.conversation_id) {
-          conversation.unread = 0;
-          conversation.active = true;
-        } else {
-          conversation.active = false;
-        }
+        conversation.active = conversation.id === action.payload.conversation_id;
 
         return conversation;
       })
@@ -106,7 +127,7 @@ export const chatSlice = createSlice({
     requestMessagesSuccess(state, action: PayloadAction<RequestMessageSuccess>) {
       state.conversations = state.conversations.map((conversation) => {
         if (conversation.active === true) {
-          conversation.messages = conversation.messages ?
+          conversation.messages = conversation.messages && conversation.loaded ?
             [
               ...conversation.messages,
               ...action.payload.messages,
@@ -128,7 +149,6 @@ export const chatSlice = createSlice({
     activeConversation(state, action: PayloadAction<number>) {
       state.conversations = state.conversations.map(conversation => {
         if (conversation.id === action.payload) {
-          conversation.unread = 0;
           conversation.active = true;
         } else {
           conversation.active = false;
@@ -178,14 +198,32 @@ export const chatSlice = createSlice({
     sendMessageSuccess(state, action: PayloadAction<Message>) {
       state.conversations = state.conversations.map((conversation) => {
         if (conversation.id === action.payload.conversation_id) {
-          if (conversation.loaded) {
-            conversation.messages = conversation.messages ?
-              [
-                action.payload,
-                ...conversation.messages,
-              ] :
-              [action.payload]
-          }
+          //handle update user
+          conversation.users = (conversation.id === action.payload.conversation_id)
+            ? conversation.users.map(user => {
+              if (user.id === action.payload.user_id) {
+                user.last_message_id = action.payload.id;
+              }
+
+              return user
+            })
+            : conversation.users
+
+          conversation.users = conversation.active
+            ? conversation.users.map(user => {
+              user.last_message_id = action.payload.id;
+
+              return user
+            })
+            : conversation.users
+
+          //handle update message
+          conversation.messages = conversation.messages ?
+            [
+              action.payload,
+              ...conversation.messages,
+            ] :
+            [action.payload]
           conversation.sending = false
           // conversation.active = true
         }

@@ -49,7 +49,7 @@ const Index: React.FC = () => {
 
     const loadData = () => {
       const conversationActive: Conversation | undefined = chat.conversations.find(e => e.active);
-      if (!conversationActive) {
+      if (!conversationActive || !conversationActive.messages) {
         return;
       }
 
@@ -81,6 +81,23 @@ const Index: React.FC = () => {
     } if (conversation && conversation.loaded) {
       dispatch(chatActions.activeConversation(id))
     }
+
+    if (conversation
+      && conversation.messages
+      && conversation.messages.length > 0
+      && conversation.users
+    ) {
+      const currentUser = conversation.users.find(e => e.id === getUser().id);
+
+      if (currentUser && currentUser.last_message_id !== conversation.messages[0].id) {
+        dispatch(chatActions.updateLastMessage({
+          conversation_id: id,
+          user_id: getUser().id,
+          message_id: conversation.messages[0].id
+        }))
+      }
+
+    }
   }
 
   const renderConversation = useCallback(() => {
@@ -100,7 +117,7 @@ const Index: React.FC = () => {
     if (conversationActive?.messages) {
       return conversationActive.messages && SortData(conversationActive.messages).map(
         (message, index) => {
-          const userName = conversationActive.users.find(e => message.user_id)
+          const userName = conversationActive.users.find(e => e.id === message.user_id)
           const momentObj = message.createdAt ? moment(message.createdAt) : moment();
           const momentString = momentObj.format('YYYY-MM-DD hh:mm'); // 2016-07-15
           if (message.user_id === auth.currentUser?.id) {

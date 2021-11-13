@@ -46,7 +46,7 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
   },
 
   conversations: {
-    width: '20%',
+    width: '40%',
     overflowY: 'auto',
     overflowX: 'hidden',
     borderRight: '1px solid #eeeeee',
@@ -66,7 +66,7 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
 
   contentConversation: {
     height: '100%',
-    width: '80%',
+    width: '60%',
     position: 'relative',
   },
 
@@ -106,7 +106,7 @@ const ConversationStyle = makeStyles((theme: Theme) => ({
   headerContentConversation: {
     padding: 20,
     display: 'flex',
-    with: '100%',
+    width: '100%',
     height: '6%',
     borderBottom: '1px solid #EEEEEE',
 

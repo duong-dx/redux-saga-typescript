@@ -27,6 +27,24 @@ const postAPI = {
       }
     })
   },
+
+  updateLastMessage(
+    accessToken: string,
+    conversationId: number,
+    userId: number,
+    messageId: number,
+  ) {
+    const url = '/user-conversation/update/last-message'
+    return axiosClient.put(url, {
+      conversation_id: conversationId,
+      user_id: userId,
+      message_id: messageId,
+    },{
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    }, )
+  },
 }
 
 export default postAPI
