@@ -1,7 +1,7 @@
 import * as Effects from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from '../../hooks';
-import { chatActions, Conversation, Message, RequestMessage } from './chatSlide';
+import { chatActions, Conversation, Message, RequestMessage, UpdateLastMessage } from './chatSlide';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { authAction } from '../auth/authSlice';
 import { EventChannel, eventChannel, Task } from 'redux-saga';
@@ -138,6 +138,19 @@ function* handleGetListMessages(action: PayloadAction<RequestMessage>) {
   }))
 }
 
+function* handleUpdateLastMessage(action: PayloadAction<UpdateLastMessage>) {
+  const token = getAccessToken();
+  const response: ResponseMessages = yield call(
+    conversationAPI.updateLastMessage,
+    token,
+    action.payload.conversation_id,
+    action.payload.user_id,
+    action.payload.message_id,
+  )
+
+  console.log(response, 22222);
+}
+
 function* flow() {
   while (true) {
     const isLoggedIn = Boolean(getToken())
@@ -146,6 +159,8 @@ function* flow() {
     yield takeEvery(chatActions.requestConversation, handleGetListConversation)
 
     yield takeEvery(chatActions.requestMessages, handleGetListMessages)
+
+    yield takeEvery(chatActions.updateLastMessage, handleUpdateLastMessage)
 
     if (isLoggedIn && currentUser) {
       yield call(flowSocket)

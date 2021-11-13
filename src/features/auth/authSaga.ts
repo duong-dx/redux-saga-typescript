@@ -24,7 +24,8 @@ function* handleLogin(payload: LoginPayload)
       id: user.id,
       email: user.email,
       name: user.name,
-      status: user.status
+      status: user.status,
+      last_message_id: null
     }
     setUser(newUser)
     yield put(authAction.loginSuccess(newUser))
