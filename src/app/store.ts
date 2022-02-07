@@ -6,13 +6,13 @@ import rootSaga from "./rootSaga";
 import authReducer from '../features/auth/authSlice';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { combineReducers } from 'redux'
-import { MemoryHistory } from 'history';
+// import { MemoryHistory } from 'history';
 import {history} from '../utils';
 import chatReducer from "../features/chats/chatSlide"
 
-const createRootReducer = (history: MemoryHistory) => combineReducers({
-  router: connectRouter(history),
-})
+// const createRootReducer = (history: MemoryHistory) => combineReducers({
+//   router: connectRouter(history),
+// })
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
